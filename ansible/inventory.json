@@ -1,0 +1,23 @@
+{
+    "all": {
+        "children": {
+            "host": {},
+            "workers": {}
+        }
+    },
+    "host": {
+        "hosts": {
+            "localhost": {
+                "ansible_connection": "local"
+            }
+        }
+    },
+    "workers": {
+        "hosts": {
+            "10.134.12.123": {},
+            "10.134.12.93": {},
+            "10.134.12.85": {},
+            "10.134.12.101": {}
+        }
+    }
+}

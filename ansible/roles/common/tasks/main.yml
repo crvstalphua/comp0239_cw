@@ -1,0 +1,20 @@
+- name: Install EPEL
+  dnf:
+    name: epel-release
+    state: present
+
+- name: Install packages
+  dnf: 
+    name: 
+      - java-11-openjdk-devel
+      - python3
+      - python3-pip
+      - nfs-utils
+      - git
+      - htop
+      - wget
+      - curl
+      - vim
+    state: present
+
+  
