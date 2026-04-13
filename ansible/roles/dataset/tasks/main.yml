@@ -1,0 +1,28 @@
+- name: Copy download script to host
+  copy:
+    src: download.sh
+    dest: /tmp/download.sh
+    mode: "0755"
+
+- name: Check if download already complete
+  shell:
+    cmd: ls /data/nyc-taxi/raw/ | wc -l
+  register: file_count
+  changed_when: false
+
+- name: Run download script
+  shell:
+    cmd: bash /tmp/download.sh
+  async: 86400
+  poll: 30
+  when: file_count.stdout | int < 180
+
+- name: Obtain final file count
+  shell:
+    cmd: ls /data/nyc-taxi/raw/ | wc -l
+  register: final_count
+  changed_when: false
+
+- name: Display final count
+  debug:
+    msg: "Total files: {{ final_count.stdout }}"
