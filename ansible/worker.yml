@@ -2,3 +2,4 @@
   become: true
   roles:
     - common
+    - nfs_client

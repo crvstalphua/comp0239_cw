@@ -1,0 +1,29 @@
+- name: Create data directory
+  file:
+    path: /data
+    state: directory
+    owner: almalinux
+    group: almalinux
+    mode: "0755"
+
+- name: Create NFS mount point
+  file: 
+    path: /data/nyc-taxi
+    state: directory
+    owner: almalinux
+    group: almalinux
+    mode: "0755"
+
+- name: Mount NDS share and persist in fstab
+  mount:
+    path: /data/nyc-taxi
+    src: "{{ nfs_server_ip }}:/data/nyc-taxi"
+    fstype: nfs
+    opts: rw,hard,rsize=131072,wsize=131072,timeo=600
+    state: mounted
+
+- name: Verify mount
+  stat: 
+    path: /data/nyc-taxi/raw
+  register: nfs_check
+  failed_when: not nfs_check.stat.exists

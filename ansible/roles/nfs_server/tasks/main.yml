@@ -1,0 +1,33 @@
+- name: Create data directory
+  file:
+    path: /data
+    state: directory
+    owner: almalinux
+    group: almalinux
+    mode: "0755"
+
+- name: Create nfs directories
+  file:
+    path: "{{ item }}"
+    state: directory
+    owner: almalinux
+    group: almalinux
+    mode: "0755"
+  loop:
+    - /data/nyc-taxi
+    - /data/nyc-taxi/raw
+    - /data/nyc-taxi/model
+    - /data/nyc-taxi/outputs
+
+- name: Configure exports
+  template:
+    src: exports.j2
+    dest: /etc/exports
+  notify: Reload NFS exports
+
+- name: Enable and start NFS server
+  service: 
+    name: nfs-server
+    state: started
+    enabled: true
+    
