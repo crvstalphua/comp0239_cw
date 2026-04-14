@@ -4,3 +4,4 @@
     - common
     - nfs_server
     - dataset
+    - spark_master

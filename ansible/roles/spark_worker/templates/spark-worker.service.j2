@@ -1,0 +1,17 @@
+[Unit]
+Description=Apache Spark Worker
+After=network.target
+
+[Service]
+Type=forking
+User=spark
+Group=spark
+ExecStart=/opt/spark/sbin/start-worker.sh spark://{{ master_ip }}:7077
+ExecStop=/opt/spark/sbin/stop-worker.sh
+Restart=on-failure
+RestartSec=10
+Environment=SPARK_HOME=/opt/spark
+Environment=JAVA_HOME=/usr/lib/jvm/java-11-openjdk-11.0.25.0.9-7.el9.x86_64
+
+[Install]
+WantedBy=multi-user.target

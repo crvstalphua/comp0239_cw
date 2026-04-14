@@ -1,0 +1,5 @@
+- name: Restart spark master
+  systemd:
+    name: spark-master
+    state: restarted
+    daemon_reload: true

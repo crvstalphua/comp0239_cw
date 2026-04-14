@@ -1,0 +1,85 @@
+- name: Create spark group
+  group: 
+    name: spark
+    system: true
+    state: present
+
+- name: Create spark user
+  user:
+    name: spark
+    group: spark
+    system: true
+    shell: /sbin/nologin
+    home: /opt/spark
+    create_home: false
+    state: present
+
+- name: Check if spark installed
+  stat:
+    path: /opt/spark/bin/spark-submit
+  register: spark_installed
+
+- name: Download spark
+  get_url:
+    url: "https://archive.apache.org/dist/spark/spark-3.5.1/spark-3.5.1-bin-hadoop3.tgz"
+    dest: /tmp/spark.tgz
+    mode: "0644"
+  when: not spark_installed.stat.exists
+
+- name: Extract spark
+  unarchive: 
+    src: /tmp/spark.tgz
+    dest: /opt
+    remote_src: true
+    creates: /opt/spark-3.5.1-bin-hadoop3
+  when: not spark_installed.stat.exists
+
+- name: Symlink spark directory
+  file: 
+    src: /opt/spark-3.5.1-bin-hadoop3
+    dest: /opt/spark
+    state: link
+    force: true
+
+- name: Set ownership
+  file:
+    path: /opt/spark-3.5.1-bin-hadoop3
+    state: directory
+    owner: spark
+    group: spark
+    recurse: true
+
+- name: Create spark directories
+  file: 
+    path: "{{ item }}"
+    state: directory
+    owner: spark
+    group: spark
+    mode: "0755"
+  loop:
+    - /opt/spark/logs
+    - /opt/spark/pids
+
+- name: Deploy spark-env.sh
+  template:
+    src: spark-env.sh.j2
+    dest: /opt/spark/conf/spark-env.sh
+    owner: spark
+    group: spark
+    mode: "0755"
+  notify: Restart spark worker
+
+- name: Install spark-worker systemd
+  template:
+    src: spark-worker.service.j2
+    dest: /etc/systemd/system/spark-worker.service
+    mode: "0644"
+  notify: Restart spark worker
+
+- name: Enable and start spark worker
+  systemd:
+    name: spark-worker
+    state: started
+    enabled: true
+    daemon_reload: true
+

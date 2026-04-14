@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+export JAVA_HOME=$(dirname $(dirname $(readlink -f $(which java))))
+export SPARK_MASTER_HOST={{ master_ip }}
+export SPARK_MASTER_PORT=7077
+export SPARK_WORKER_CORES=4
+export SPARK_WORKER_MEMORY=28g
+export SPARK_LOG_DIR=/opt/spark/logs
+export SPARK_PID_DIR=/opt/spark/pids
