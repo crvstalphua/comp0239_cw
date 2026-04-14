@@ -10,14 +10,15 @@
   file:
     path: "{{ item }}"
     state: directory
-    owner: almalinux
-    group: almalinux
+    owner: spark
+    group: spark
     mode: "0755"
   loop:
     - /data/nyc-taxi
     - /data/nyc-taxi/raw
     - /data/nyc-taxi/model
     - /data/nyc-taxi/outputs
+    - /data/nyc-taxi/cleaned
 
 - name: Configure exports
   template:

@@ -99,3 +99,16 @@
     state: started
     enabled: true
     daemon_reload: true
+
+- name: Set permission on spark pipeline directory
+  file:
+    path: "{{ project_dir }}/spark"
+    state: directory
+    mode: "0755"
+    recurse: true
+
+- name: Make almalinux home directory accessible to spark user
+  file:
+    path: /home/almalinux
+    state: directory
+    mode: "0755"

@@ -1,0 +1,9 @@
+- name: Install pyspark and dependencies
+  pip:
+    name: 
+      - pyspark==3.5.1
+      - pyarrow
+      - pandas
+      - numpy
+    executable: pip3
+    state: present

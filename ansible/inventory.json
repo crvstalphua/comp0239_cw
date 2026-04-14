@@ -7,6 +7,7 @@
         "vars": {
             "nfs_server_ip": "10.134.12.124",
             "master_ip": "10.134.12.124",
+            "project_dir": "/home/almalinux/comp0239_cw",
             "worker_ips": [
                 "10.134.12.123",
                 "10.134.12.93",
