@@ -14,43 +14,33 @@
     create_home: false
     state: present
 
-- name: Check if spark installed
-  stat:
-    path: /opt/spark/bin/spark-submit
-  register: spark_installed
+- name: Create spark install directory
+  file: 
+    path: /opt/spark
+    state: directory
+    owner: spark
+    group: spark
+    mode: "0755"
 
 - name: Download spark
   get_url:
     url: "https://archive.apache.org/dist/spark/spark-3.5.1/spark-3.5.1-bin-hadoop3.tgz"
-    dest: /tmp/spark.tgz
+    dest: /tmp/spark-3.5.1-bin-hadoop3.tgz
     mode: "0644"
-  when: not spark_installed.stat.exists
+    force: false
 
 - name: Extract spark
   unarchive: 
-    src: /tmp/spark.tgz
-    dest: /opt
-    remote_src: true
-    creates: /opt/spark-3.5.1-bin-hadoop3
-  when: not spark_installed.stat.exists
-
-- name: Symlink spark directory
-  file: 
-    src: /opt/spark-3.5.1-bin-hadoop3
+    src: /tmp/spark-3.5.1-bin-hadoop3.tgz
     dest: /opt/spark
-    state: link
-    force: true
-
-- name: Set ownership
-  file:
-    path: /opt/spark-3.5.1-bin-hadoop3
-    state: directory
+    remote_src: true
+    extra_opts: ["--strip-components=1"]
+    creates: /opt/spark/bin/spark-submit
     owner: spark
     group: spark
-    recurse: true
 
 - name: Create spark directories
-  file: 
+  file:
     path: "{{ item }}"
     state: directory
     owner: spark

@@ -4,3 +4,4 @@
     - common
     - nfs_client
     - spark_worker
+    - node_exporter

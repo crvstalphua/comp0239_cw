@@ -1,0 +1,17 @@
+[Unit]
+Description=Grafana 
+After=network.target
+
+[Service]
+User=almalinux
+Group=almalinux
+WorkingDirectory=/opt/grafana-v11.0.0
+Environment="GF_PATHS_HOME=/opt/grafana-v11.0.0"
+ExecStart=/opt/grafana-v11.0.0/bin/grafana-server \
+    --config=/etc/grafana/grafana.ini \
+    --homepath=/opt/grafana-v11.0.0
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
+

@@ -1,0 +1,51 @@
+- name: Download Grafana
+  get_url:
+    url: "https://dl.grafana.com/oss/release/grafana-11.0.0.linux-amd64.tar.gz"
+    dest: /tmp/grafana.tar.gz
+    force: false
+
+- name: Extract Grafana
+  unarchive: 
+    src: /tmp/grafana.tar.gz
+    dest: /opt 
+    remote_src: true
+    creates: /opt/grafana-v11.0.0/bin/grafana-server
+
+- name: Create Grafana directories
+  file: 
+    path: "{{ item }}"
+    state: directory
+    owner: almalinux
+    group: almalinux
+    mode: "0755"
+  loop:
+    - /etc/grafana
+    - /var/lib/grafana
+    - /var/log/grafana
+
+- name: Deploy Grafana config
+  template:
+    src: grafana.ini.j2
+    dest: /etc/grafana/grafana.ini
+    owner: almalinux
+    group: almalinux
+    mode: "0644"
+  notify: Restart Grafana
+
+- name: Deploy Grafana systemd
+  template: 
+    src: grafana.service.j2
+    dest: /etc/systemd/system/grafana.service
+    mode: "0644"
+  notify: Restart Grafana
+
+- name: Enable and start Grafana
+  systemd:
+    name: grafana
+    state: started
+    enabled: true
+    daemon_reload: true
+
+
+
+

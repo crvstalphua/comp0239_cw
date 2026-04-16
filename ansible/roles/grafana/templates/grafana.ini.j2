@@ -1,0 +1,17 @@
+[server]
+http_port = 3000
+domain = localhost
+
+[paths]
+data = /var/lib/grafana
+logs = /var/log/grafana
+
+[auth.anonymous]
+enabled = true
+org_name = Main Org.
+org_role = Viewer
+
+[security]
+admin_user = admin
+admin_password = admin
+allow_embedding = true

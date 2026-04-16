@@ -6,3 +6,6 @@
     - dataset
     - spark_master
     - pyspark
+    - node_exporter
+    - prometheus
+    - grafana
