@@ -185,9 +185,9 @@ Submit a query for fare prediction
 ```
 cd ../query
 #can be run with a .csv file 
-python3 run_pipeline.py --input input_file.cav
+python3 submit_query.py --input input_file.cav
 #can be run with a .parquet file
-python3 run_pipeline.py --input input_file.parquet
+python3 submit_query.py --input input_file.parquet
 ```
 
 #### Input Format
@@ -251,8 +251,16 @@ ssh -i ~/.ssh/comp0235 -L 8080:10.134.12.124:8080 -J condenser almalinux@10.134.
 ```
 
 ### View logs:
-???
+```
+# capacity test shell output
+tail -f /tmp/capacity_test.log
 
+# per-query log (timing, config, success)
+cat /data/nyc-taxi/outputs/query_log.csv
+
+# spark application logs
+/opt/spark/logs/
+```
 ---
 ## Capacity Test
 Simulates multiple users sending in queries, processes sequentially through each month of data. Runs up to 24 hours, adjusting spark configurations at each iteration. 
