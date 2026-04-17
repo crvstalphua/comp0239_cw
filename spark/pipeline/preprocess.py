@@ -1,6 +1,7 @@
 from pyspark.sql import SparkSession
 from pyspark.sql.functions import hour, dayofweek, month, col
 from pyspark.sql.types import DoubleType, LongType
+from features import select_features_with_fare
 import os
 
 # start spark session
@@ -25,39 +26,7 @@ def process_file(year, month_num):
     print(f"Processing {year}-{month_num:02d}...")
     df = spark.read.option("enableVectorizedReader", "false").parquet(path)
 
-    # select features
-    df.select(
-        col("tpep_pickup_datetime"),
-        col("trip_distance").cast(DoubleType()),
-        col("passenger_count").cast(DoubleType()),
-        col("fare_amount").cast(DoubleType()),
-        col("PULocationID").cast(LongType()),
-        col("DOLocationID").cast(LongType()))
-
-    # extract hour, day, month
-    df = df.withColumn("hour", hour(col("tpep_pickup_datetime"))) \
-        .withColumn("day_of_week", dayofweek(col("tpep_pickup_datetime"))) \
-        .withColumn("month", month(col("tpep_pickup_datetime")))
-
-    # filter bad data
-    df = df.filter(
-        (col("fare_amount") > 0) &
-        (col("fare_amount") < 150) &
-        (col("trip_distance") > 0) &
-        (col("passenger_count") > 0) &
-        (col("passenger_count") <= 6)
-    ).dropna()
-
-    final_df = df.select(
-        "trip_distance",
-        "PULocationID",
-        "DOLocationID",
-        "passenger_count",
-        "hour",
-        "day_of_week",
-        "month",
-        "fare_amount"
-    )
+    final_df = select_features_with_fare(df)
 
     return final_df
 
