@@ -2,16 +2,22 @@
 # input columns, trip_distance, pulocationid, dolocationid, passengercount, tpep_pickup_datetime
 
 import argparse
+import csv
 import os
 import sys
 import uuid
 import shutil
 import subprocess
+import time
 from datetime import datetime
 
 def parse_args():
     parser = argparse.ArgumentParser(description="Submit a NYC Taxi Fare prediction query")
     parser.add_argument("--input", required=True, help="Path to input file")
+    parser.add_argument("--executor-memory", default="2g")
+    parser.add_argument("--executor-cores", default="2")
+    parser.add_argument("--parallelism", default="8")
+    parser.add_argument("--config-label", default="default")
     return parser.parse_args()
 
 def run_prediction():
@@ -55,20 +61,44 @@ def run_prediction():
         spark_submit, 
         "--master", master,
         "--name", query_name,
+        "--executor-memory", args.executor_memory,
+        "--executor-cores", args.executor_cores,
+        "--conf", f"spark.default.parallelism={args.parallelism}",
         "--py-files", features_script,
         predict_script,
         "--input", nfs_input,
         "--output", output_dir
     ]
 
+    start_time = time.time()
     result = subprocess.run(cmd, capture_output=True, text=True)
+    duration = time.time() - start_time
 
     if result.returncode == 0:
+        log_query(query_name, args.input, duration, True)
         print(f"Query completed successfully. Results saved to: {output_dir}")
     else:
+        log_query(query_name, args.input, duration, False)
         print(f"Job failed.")
         print(result.stderr)
         sys.exit(1)
+
+def log_query(query_name, input_path, duration_seconds, success, config_label="default"):
+    log_file = "/data/nyc-taxi/outputs/query_log.csv"
+    file_exists = os.path.exists(log_file)
+
+    with open(log_file, "a", newline="") as f:
+        writer = csv.writer(f)
+        if not file_exists:
+            writer.writerow(["timestamp", "query_id", "input", "duration_seconds", "success", "config"])
+        writer.writerow([
+            datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+            query_name,
+            os.path.basename(input_path),
+            round(duration_seconds, 2),
+            success,
+            config_label
+        ])
 
 if __name__ == "__main__":
     run_prediction()

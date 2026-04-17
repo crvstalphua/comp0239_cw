@@ -13,7 +13,7 @@ spark.sparkContext.setLogLevel("WARN")
 
 DATA_DIR = "/data/nyc-taxi/raw"
 OUTPUT_DIR = "/data/nyc-taxi/cleaned"
-YEARS = list(range(2019, 2024))
+YEARS = list(range(2015, 2024))
 MONTHS = list(range(1, 13))
 
 def process_file(year, month_num):

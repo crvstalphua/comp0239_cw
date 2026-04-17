@@ -15,7 +15,7 @@
     cmd: bash /tmp/download.sh
   async: 86400
   poll: 30
-  when: file_count.stdout | int < 180
+  when: file_count.stdout | int < 240
 
 - name: Obtain final file count
   shell:

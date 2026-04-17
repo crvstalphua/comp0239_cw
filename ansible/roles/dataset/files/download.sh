@@ -2,10 +2,12 @@
 
 BASE_URL="https://d37ci6vzurychx.cloudfront.net/trip-data"
 DEST="/data/nyc-taxi/raw"
+YEARS="2015 2016 2017 2018 2019 2020 2021 2022 2023"
+MONTHS="01 02 03 04 05 06 07 08 09 10 11 12"
 
-for year in $(seq 2009 2023); do
-    for month in $(seq 1 12); do
-        filename="yellow_tripdata_${year}-$(printf '%02d' $month).parquet"
+for year in $YEARS; do
+    for month in $MONTHS; do
+        filename="yellow_tripdata_${year}-${month}.parquet"
         filepath="${DEST}/${filename}"
 
         # skip if already downloaded
@@ -14,17 +16,17 @@ for year in $(seq 2009 2023); do
             continue
         fi
 
-        # check if file actually exists on CDN
-        http_code=$(curl -s -o /dev/null -w "%{http_code}" --head "${BASE_URL}/${filename}")
+        echo "Downloading: ${filename}"
+        http_code=$(curl -s -o "$filepath" -w "%{http_code}" "${BASE_URL}/${filename}")
 
-        if [ "$http_code" == "200" ]; then
-            echo "Downloading: ${filename}"
-            curl -f -o "$filepath" "${BASE_URL}/${filename}" || {
-                echo "Download failed for ${filename}, removing partial file"
+        if [ "$http_code" -eq "200" ]; then
+            echo "Downloaded: ${filename}"
+        else 
+            echo "Not available (http $http_code), skipping ${filename}"
                 rm -f "$filepath"
-            }
-        else
-            echo "File not availble, skipping: ${filename}"
-        fi 
+        fi
     done 
 done 
+
+echo "Download complete."
+echo "Total files: $(ls $DEST/*.parquet 2>/dev/null | wc -l)"
