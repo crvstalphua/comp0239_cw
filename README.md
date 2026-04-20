@@ -73,8 +73,12 @@ Laptop → condenser (UCL jumphost) → Host VM (10.134.12.124)
 - Train/test split: 80/20
 
 **Performance:**
-- Root Mean Squared Error (RMSE): ~4.00
-- R²: ~0.90
+- Root Mean Squared Error (RMSE): 3.75
+- R²: 0.8907
+- Mean Absolute Error (MAE): $1.90
+- Within $1: 46.3%
+- Within $2: 72.0%
+- Within $5: 93.4%
 
 **Model storage:** `/data/nyc-taxi/model/gbt_taxi_model` (Spark ML PipelineModel format)
 
@@ -293,7 +297,33 @@ ps aux | grep capacity_test | grep -v grep
 The test cycles through all 108 input files per configuration before switching, ensuring fair comparison.
 
 ### Analysis Results
-??? to include after analysis
+Once the stress test is complete, run the analysis script to generate a summary of performance across all configurations:
+
+```
+python3 ~/comp0239_cw/scripts/analyse_results.py
+```
+
+**Test duration:** 2026-04-17 16:39 UTC to 2026-04-18 16:36 UTC (24 hours)
+
+**Summary:**
+| Metric | Value |
+|--------|-------|
+| Total runs | 842 |
+| Successful runs | 842 |
+| Failed runs | 0 |
+| Success rate | 100% |
+
+**Performance by Spark configuration:**
+| Config | Executor Memory | Cores | Mean Duration | Throughput (runs/hr) |
+|--------|----------------|-------|---------------|----------------------|
+| A — baseline | 2g | 2 | 103.6s | 34.75 |
+| B — more memory | 4g | 2 | 102.2s | 35.23 |
+| C — more cores | 2g | 4 | **100.5s** | **35.84** |
+| D — balanced | 4g | 4 | 102.8s | 35.02 |
+
+**Conclusion:** Config C (2g memory, 4 cores) achieved the best throughput at 35.84 runs/hour, 3% faster than the baseline. The workload is CPU-bound rather than memory-bound, doubling cores improved performance more than doubling memory. All configurations maintained 100% success rate throughout the 24-hour test.
+
+Full results available in `results/stress_test_analysis.json`.
 
 ---
 ## Training the model
@@ -319,6 +349,15 @@ sudo -u spark /opt/spark/bin/spark-submit \
  
 Trains GBTRegressor on cleaned data and saves the model to NFS.
 
+### Evaluate (run as spark user)
+```
+sudo -u spark /opt/spark/bin/spark-submit \
+  --master spark://10.134.12.124:7077 \
+  --executor-memory 8g \
+  --py-files /home/almalinux/comp0239_cw/spark/pipeline/features.py \
+  /home/almalinux/comp0239_cw/spark/pipeline/evaluate.py
+```
+Results saved to `results/evaluation.json`.
 
 ---
 ## Repository Structure
