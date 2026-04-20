@@ -189,7 +189,7 @@ Submit a query for fare prediction
 ```
 cd ../query
 #can be run with a .csv file 
-python3 submit_query.py --input input_file.cav
+python3 submit_query.py --input input_file.csv
 #can be run with a .parquet file
 python3 submit_query.py --input input_file.parquet
 ```
@@ -302,6 +302,11 @@ Once the stress test is complete, run the analysis script to generate a summary 
 ```
 python3 ~/comp0239_cw/scripts/analyse_results.py
 ```
+The script reads 'query_log.csv' and outputs:
+- Total runs and success rate
+- Mean, min, max, and standard deviation of query duration per config
+- Throughput in runs per hour per config
+- Best and worst performing config
 
 **Test duration:** 2026-04-17 16:39 UTC to 2026-04-18 16:36 UTC (24 hours)
 
@@ -391,11 +396,19 @@ comp0239_cw/
 │       ├── features.py     # Feature engineering
 │       ├── preprocess.py   # Bulk data preprocessing (for training/batch pred)
 │       ├── train.py        # Model training
+│       ├── evaluate.py     # Model evaluation
 │       ├── predict.py      # Batch prediction
 │       └── predict_user.py # User query prediction
+│
+│
+├── results/
+│       ├── evaluation.json # Model evaluation metrics
+│       └── stress_test_analysis.json # Capacity test analysis
+│
 └── query/
     ├── submit_query.py     # User job submission
     ├── get_results.py      # Result retrieval
+    ├── analyse_results.py  # Stress test analysis
     └── capacity_test.sh    # 24-hour stress test
 ```
 ---
