@@ -405,7 +405,6 @@ comp0239_cw/
 │       ├── preprocess.py   # Bulk data preprocessing (for training/batch pred)
 │       ├── train.py        # Model training
 │       ├── evaluate.py     # Model evaluation
-│       ├── predict.py      # Batch prediction (no longer in use)
 │       └── predict_user.py # User query prediction
 ├── results/
 │       ├── evaluation.json # Model evaluation metrics
