@@ -132,7 +132,7 @@ variable keyname {
 ### 3. Configure software
 ```
 #copy public key over to all machines 
-#change any variables/directories before running any ansible notebooks
+#change any variables/directories before running any ansible playbooks
 cd ../ansible
 #configure host machine
 ansible-playbook -i inventory.json host.yml --private-key ~/.ssh/your_private_key
@@ -224,6 +224,10 @@ python3 ~/comp0239_cw/query/get_results.py --list
 # view results for a specific query
 python3 ~/comp0239_cw/query/get_results.py --query query_name
  # example: python3 ~/comp0239_cw/query/get_results.py --query query_20260417_120905_ccbb8980
+
+# view and download results to a local folder
+python3 ~/comp0239_cw/query/get_results.py --query query_name --download ~/my_results/
+
 ```
 
 #### Output format
@@ -234,7 +238,10 @@ python3 ~/comp0239_cw/query/get_results.py --query query_name
        5.1          161           234         2.0 $         21.92
 ```
  
-Full results are saved to `/data/nyc-taxi/outputs/<query_name>/part-*.csv`.
+Full results are saved to `/data/nyc-taxi/outputs/<query_name>`.
+
+The `--download` flag copies results to a local folder as `<query_name>_results.csv`, 
+allowing users to open predictions in Excel without needing direct NFS access.
  
 ---
 
@@ -402,7 +409,7 @@ comp0239_cw/
 │       └── predict_user.py # User query prediction
 ├── results/
 │       ├── evaluation.json # Model evaluation metrics
-│       ├── query_20260420_222512_11b5c444_results # Sample query result
+│       ├── query_20260420_222512_11b5c444_results.csv # Sample query result
 │       └── stress_test_analysis.json # Capacity test analysis
 └── query/
     ├── submit_query.py     # User job submission
