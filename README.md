@@ -37,7 +37,7 @@ Laptop → condenser (UCL jumphost) → Host VM (10.134.12.124)
 
 **Scope:** Yellow taxi trip records, January 2015 – December 2023
  
-**Size:** ~108 Parquet files, ~10 GB raw, ~150 million records after cleaning
+**Size:** ~108 Parquet files, ~694 million records after cleaning
 
 **Features used for prediction:**
  
