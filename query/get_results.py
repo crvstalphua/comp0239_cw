@@ -1,12 +1,14 @@
 import argparse
 import os
 import glob
+import shutil
 
 def parse_args():
     parser = argparse.ArgumentParser(description="View query results")
     parser.add_argument("--query", help="Query name from submit_query.py")
     parser.add_argument("--rows", type=int, default=20, help="Number of rows to show")
     parser.add_argument("--list", action="store_true", help="List all completed queries")
+    parser.add_argument("--download", help="Copy results to local directory", default=None)
     return parser.parse_args()
 
 def list_queries():
@@ -63,6 +65,16 @@ def main():
         list_queries()
     elif args.query:
         show_results(args.query, args.rows)
+
+        if args.download:
+            output_dir = f"/data/nyc-taxi/outputs/{args.query}"
+            csv_files = glob.glob(F"{output_dir}/part-*.csv")
+            if csv_files:
+                os.makedirs(args.download, exist_ok=True)
+                dest = os.path.join(args.download, f"{args.query}_results.csv")
+                shutil.copy2(csv_files[0], dest)
+                print(f"Results downloaded to: {dest}")
+
     else:
         print("Error: provide --query <name> or --list")
         print("Example: python3 get_results.py --list")

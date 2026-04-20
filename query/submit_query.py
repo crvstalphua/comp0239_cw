@@ -75,10 +75,10 @@ def run_prediction():
     duration = time.time() - start_time
 
     if result.returncode == 0:
-        log_query(query_name, args.input, duration, True)
+        log_query(query_name, args.input, duration, True, args.config_label)
         print(f"Query completed successfully. Results saved to: {output_dir}")
     else:
-        log_query(query_name, args.input, duration, False)
+        log_query(query_name, args.input, duration, False, args.config_label)
         print(f"Job failed.")
         print(result.stderr)
         sys.exit(1)
