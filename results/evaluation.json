@@ -1,0 +1,10 @@
+{
+  "timestamp": "2026-04-20 22:19:18",
+  "test_records": 138859853,
+  "rmse": 3.75,
+  "r2": 0.8907,
+  "mae": 1.9028,
+  "percentage_within_1_dollar": 46.32,
+  "percentage_within_2_dollar": 72.03,
+  "percentage_within_5_dollar": 93.44
+}

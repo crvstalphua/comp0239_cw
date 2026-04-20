@@ -1,0 +1,56 @@
+{
+  "timestamp": "2026-04-20 21:59:23",
+  "total_runs": 842,
+  "successful_runs": 842,
+  "failed_runs": 0,
+  "duration": {
+    "start": "2026-04-17 16:39:18",
+    "end": "2026-04-18 16:36:59"
+  },
+  "config_performance": {
+    "mean": {
+      "config_A_baseline": 103.59,
+      "config_B_more_memory": 102.2,
+      "config_C_more_cores": 100.45,
+      "config_D_balanced": 102.8
+    },
+    "std": {
+      "config_A_baseline": 39.87,
+      "config_B_more_memory": 38.57,
+      "config_C_more_cores": 41.21,
+      "config_D_balanced": 39.69
+    },
+    "min": {
+      "config_A_baseline": 37.2,
+      "config_B_more_memory": 38.49,
+      "config_C_more_cores": 30.82,
+      "config_D_balanced": 33.72
+    },
+    "max": {
+      "config_A_baseline": 179.73,
+      "config_B_more_memory": 176.42,
+      "config_C_more_cores": 181.88,
+      "config_D_balanced": 170.02
+    },
+    "count": {
+      "config_A_baseline": 216,
+      "config_B_more_memory": 216,
+      "config_C_more_cores": 216,
+      "config_D_balanced": 194
+    }
+  },
+  "success_rate": {
+    "config_A_baseline": 1.0,
+    "config_B_more_memory": 1.0,
+    "config_C_more_cores": 1.0,
+    "config_D_balanced": 1.0
+  },
+  "throughput_runs_per_hour": {
+    "config_A_baseline": 34.75,
+    "config_B_more_memory": 35.23,
+    "config_C_more_cores": 35.84,
+    "config_D_balanced": 35.02
+  },
+  "best_config": "config_C_more_cores",
+  "worst_config": "config_A_baseline"
+}
