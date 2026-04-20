@@ -48,6 +48,12 @@ while true; do
         --parallelism "$PARALLELISM" \
         --config-label "$LABEL"
 
+    # clean up output to save disk space
+    LATEST=$(ls -td /data/nyc-taxi/outputs/query_*/ 2>/dev/null | head -1)
+    if [ -n "$LATEST" ]; then
+        sudo rm -rf "$LATEST"
+    fi
+
     RUN=$((RUN + 1))
 done
 
