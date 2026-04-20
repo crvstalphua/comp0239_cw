@@ -410,6 +410,7 @@ comp0239_cw/
 ├── results/
 │       ├── evaluation.json # Model evaluation metrics
 │       ├── query_20260420_222512_11b5c444_results.csv # Sample query result
+│       ├── query_log.csv    # Sample query log (actual one file in nfs)
 │       └── stress_test_analysis.json # Capacity test analysis
 └── query/
     ├── submit_query.py     # User job submission
