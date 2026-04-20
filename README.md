@@ -369,6 +369,7 @@ Results saved to `results/evaluation.json`.
  
 ```
 comp0239_cw/
+├── test_trips.csv          # Test file for user queries
 ├── terraform/              # VM provisioning
 │   ├── main.tf
 │   ├── variables.tf
@@ -401,6 +402,7 @@ comp0239_cw/
 │       └── predict_user.py # User query prediction
 ├── results/
 │       ├── evaluation.json # Model evaluation metrics
+│       ├── query_20260420_222512_11b5c444_results # Sample query result
 │       └── stress_test_analysis.json # Capacity test analysis
 └── query/
     ├── submit_query.py     # User job submission
