@@ -208,7 +208,8 @@ The script automatically:
 1. Copies the input file to NFS
 2. Submits a Spark job to the cluster
 3. Cleans up the input file after completion
-4. Logs the query to `/data/nyc-taxi/outputs/query_log.csv`
+4. Saves the prediction results
+5. Logs the query to `/data/nyc-taxi/outputs/query_log.csv`
 
 ### 5. Retrieve results
 
@@ -296,7 +297,7 @@ The test cycles through all 108 input files per configuration before switching, 
 
 ---
 ## Training the model
-If necessary to train the model from scratch, upload all files into the nfs folder then adjust file names and file paths.
+If necessary to train the model from scratch, upload all PARQUET files into the nfs raw folder then adjust file names and file paths.
 
 ### Preprocess (one-time, run as spark user)
 ```
